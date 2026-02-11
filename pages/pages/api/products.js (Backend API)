@@ -1,0 +1,9 @@
+export default function handler(req, res) {
+  const products = [
+    { id: 1, name: "Paracetamol", price: 20 },
+    { id: 2, name: "Crocin", price: 30 },
+    { id: 3, name: "Cough Syrup", price: 120 }
+  ];
+
+  res.status(200).json(products);
+}
