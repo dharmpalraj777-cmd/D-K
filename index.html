@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Engineering Casio Calculator</title>
+
+<style>
+body{
+  background:#cfd3d6;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  font-family:Arial;
+}
+
+.calc{
+  background:#1a1a1a;
+  width:360px;
+  padding:15px;
+  border-radius:12px;
+}
+
+.display{
+  background:#e9f5e9;
+  height:70px;
+  font-size:26px;
+  padding:10px;
+  text-align:right;
+  border-radius:6px;
+  margin-bottom:10px;
+  overflow-x:auto;
+}
+
+.keys{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:8px;
+}
+
+button{
+  height:48px;
+  font-size:15px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+.num{ background:#333; color:#fff; }
+.op{ background:#ff9800; color:#fff; }
+.func{ background:#555; color:#fff; }
+.eq{ background:#2ecc71; color:#fff; grid-column:span 2; }
+.ac{ background:#e74c3c; color:#fff; grid-column:span 3; }
+</style>
+</head>
+
+<body>
+
+<div class="calc">
+  <div id="display" class="display"></div>
+
+  <div class="keys">
+    <button class="func" onclick="press('sin')">sin</button>
+    <button class="func" onclick="press('cos')">cos</button>
+    <button class="func" onclick="press('tan')">tan</button>
+    <button class="func" onclick="press('log')">log</button>
+    <button class="func" onclick="press('ln')">ln</button>
+
+    <button class="func" onclick="press('sqrt')">√</button>
+    <button class="func" onclick="press('^')">xʸ</button>
+    <button class="func" onclick="press('(')">(</button>
+    <button class="func" onclick="press(')')">)</button>
+    <button class="func" onclick="press('pi')">π</button>
+
+    <button class="num" onclick="press('7')">7</button>
+    <button class="num" onclick="press('8')">8</button>
+    <button class="num" onclick="press('9')">9</button>
+    <button class="op" onclick="press('/')">÷</button>
+    <button class="op" onclick="press('*')">×</button>
+
+    <button class="num" onclick="press('4')">4</button>
+    <button class="num" onclick="press('5')">5</button>
+    <button class="num" onclick="press('6')">6</button>
+    <button class="op" onclick="press('-')">−</button>
+    <button class="op" onclick="press('+')">+</button>
+
+    <button class="num" onclick="press('1')">1</button>
+    <button class="num" onclick="press('2')">2</button>
+    <button class="num" onclick="press('3')">3</button>
+    <button class="num" onclick="press('.')">.</button>
+    <button class="num" onclick="press('0')">0</button>
+
+    <button class="ac" onclick="clearAll()">AC</button>
+    <button class="eq" onclick="calculate()">=</button>
+  </div>
+</div>
+
+<script>
+let exp = "";
+const display = document.getElementById("display");
+
+function press(val){
+  exp += val;
+  display.innerText = exp;
+}
+
+function clearAll(){
+  exp = "";
+  display.innerText = "";
+}
+
+function calculate(){
+  try{
+    let result = evaluate(exp);
+    display.innerText = result;
+    exp = result.toString();
+  }catch{
+    display.innerText = "ERROR";
+    exp = "";
+  }
+}
+
+/* ENGINEERING MATH PARSER */
+function evaluate(expression){
+  expression = expression
+    .replace(/pi/g, Math.PI)
+    .replace(/sin/g, "Math.sin")
+    .replace(/cos/g, "Math.cos")
+    .replace(/tan/g, "Math.tan")
+    .replace(/log/g, "Math.log10")
+    .replace(/ln/g, "Math.log")
+    .replace(/sqrt/g, "Math.sqrt")
+    .replace(/\^/g, "**");
+
+  return Function("return " + expression)();
+}
+</script>
+
+</body>
+</html>
